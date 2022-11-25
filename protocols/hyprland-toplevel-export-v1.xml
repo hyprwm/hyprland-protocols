@@ -64,8 +64,7 @@
       will then be able to send a "copy" request. If the capture is successful,
       the compositor will send a "flags" followed by a "ready" event.
 
-      For objects version 2 or lower, wl_shm buffers are always supported, ie.
-      the "buffer" event is guaranteed to be sent.
+      wl_shm buffers are always supported, ie. the "buffer" event is guaranteed to be sent.
 
       If the capture failed, the "failed" event is sent. This can happen anytime
       before the "ready" event.
