@@ -38,12 +38,21 @@
 
     <request name="capture_toplevel">
       <description summary="capture a toplevel">
-        Capture the next frame of a toplevel.
+        Capture the next frame of a toplevel. (window)
+
+        The captured frame will not contain any server-side decorations and will
+        ignore the compositor-set geometry, like e.g. rounded corners.
+
+        It will contain all the subsurfaces and popups, however the latter will be clipped
+        to the geometry of the base surface.
+
+        The handle parameter refers to the address of the window as seen in `hyprctl clients`.
+        For example, for d161e7b0 it would be 3512854448.
       </description>
       <arg name="frame" type="new_id" interface="hyprland_toplevel_export_frame_v1"/>
       <arg name="overlay_cursor" type="int"
         summary="composite cursor onto the frame"/>
-      <arg name="handle" type="int" summary="the *hyprland* handle of a window to be captured"/>
+      <arg name="handle" type="uint" summary="the handle of the toplevel (window) to be captured"/>
     </request>
 
     <request name="destroy" type="destructor">
