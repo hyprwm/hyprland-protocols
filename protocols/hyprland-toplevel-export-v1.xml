@@ -142,8 +142,6 @@
         summary="the object has already been used to copy a wl_buffer"/>
       <entry name="invalid_buffer" value="1"
         summary="buffer attributes are invalid"/>
-      <entry name="invalid_handle" value="2"
-        summary="the handle is invalid. The window may not exist or be unshareable (e.g. unmapped)"/>
     </enum>
 
     <enum name="flags" bitfield="true">
