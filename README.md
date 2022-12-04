@@ -6,10 +6,9 @@ This repository exists in an effort to bridge the gap between Hyprland and KDE/G
 Since `wlr-protocols` is closed for new submissions, and `wayland-protocols` is very slow with changes, this repo will hold protocols used by Hyprland to bridge the aforementioned gap.
 
 # Finished protocols
-- None
+- `hyprland_toplevel_export` -> for exporting toplevel buffers (aka. windows) for screensharing
 
 # Planned protocols
-- `hyprland_toplevel_export` -> for exporting toplevel buffers (aka. windows) for screensharing
 - `hyprland_global_keybindings` -> for managing global keybinds via D-Bus.
 
 # Contributing
