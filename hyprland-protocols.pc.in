@@ -1,0 +1,7 @@
+prefix=@prefix@
+datarootdir=@datarootdir@
+pkgdatadir=${pc_sysrootdir}${datarootdir}/@PACKAGE@
+
+Name: Hyprland Protocols
+Description: Hyprland protocol files
+Version: @HYPRLAND_PROTOCOLS_VERSION@
