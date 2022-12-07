@@ -68,6 +68,18 @@
         appropriate destroy request has been called.
       </description>
     </request>
+
+    <!-- Version 2 -->
+    <request name="capture_toplevel_with_wlr_toplevel_handle">
+      <description summary="capture a toplevel">
+        Same as capture_toplevel, but with a zwlr_foreign_toplevel_handle_v1 handle.
+      </description>
+      <arg name="frame" type="new_id" interface="hyprland_toplevel_export_frame_v1"/>
+      <arg name="overlay_cursor" type="int"
+        summary="composite cursor onto the frame"/>
+      <arg name="handle" type="object" allow-null="false" summary="the zwlr_foreign_toplevel_handle_v1 handle of the toplevel to be captured"/>
+    </request>
+    <!-- End Version 2 -->
   </interface>
 
   <interface name="hyprland_toplevel_export_frame_v1" version="1">
