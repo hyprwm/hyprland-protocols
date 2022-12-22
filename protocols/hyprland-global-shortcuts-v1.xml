@@ -49,7 +49,7 @@
         The shortcut's keybinding shall be dealt with by the compositor.
       </description>
       <arg name="shortcut" type="new_id" interface="hyprland_global_shortcut_v1"/>
-      <arg name="id" type="uint" summary="a unique id for the shortcut"/>
+      <arg name="id" type="string" summary="a unique id for the shortcut"/>
       <arg name="app_id" type="string" summary="the app_id of the application requesting the shortcut"/>
       <arg name="description" type="string" summary="user-readable text describing what the shortcut does."/>
       <arg name="trigger_description" type="string" summary="user-readable text describing how to trigger the shortcut for the client to render."/>
