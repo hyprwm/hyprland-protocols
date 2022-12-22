@@ -64,13 +64,29 @@
     <event name="pressed">
       <description summary="keystroke pressed">
         The keystroke was pressed.
+
+        tv_ values hold the timestamp of the occurrence.
       </description>
+      <arg name="tv_sec_hi" type="uint"
+           summary="high 32 bits of the seconds part of the timestamp"/>
+      <arg name="tv_sec_lo" type="uint"
+           summary="low 32 bits of the seconds part of the timestamp"/>
+      <arg name="tv_nsec" type="uint"
+           summary="nanoseconds part of the timestamp"/>
     </event>
 
     <event name="released">
       <description summary="keystroke released">
         The keystroke was released.
+
+        tv_ values hold the timestamp of the occurrence.
       </description>
+      <arg name="tv_sec_hi" type="uint"
+           summary="high 32 bits of the seconds part of the timestamp"/>
+      <arg name="tv_sec_lo" type="uint"
+           summary="low 32 bits of the seconds part of the timestamp"/>
+      <arg name="tv_nsec" type="uint"
+           summary="nanoseconds part of the timestamp"/>
     </event>
   </interface>
 </protocol>
