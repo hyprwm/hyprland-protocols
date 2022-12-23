@@ -38,7 +38,7 @@ pkgconfig_configuration = configuration_data()
 pkgconfig_configuration.set('prefix', get_option('prefix'))
 pkgconfig_configuration.set('datarootdir', '${prefix}/@0@'.format(get_option('datadir')))
 pkgconfig_configuration.set('abs_top_srcdir', hyprland_protocols_srcdir)
-pkgconfig_configuration.set('PACKAGE', 'hyprland-protocols')
+pkgconfig_configuration.set('PACKAGE', 'protocols')
 pkgconfig_configuration.set('HYPRLAND_PROTOCOLS_VERSION', hyprland_protocols_version)
 
 pkg_install_dir = join_paths(get_option('datadir'), 'pkgconfig')
