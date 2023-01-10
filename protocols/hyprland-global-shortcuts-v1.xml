@@ -31,8 +31,8 @@
   </copyright>
 
   <description summary="registering global shortcuts">
-    This protocol allows a client to register keystrokes that will be passed
-    to it regardless of its focus state.
+    This protocol allows a client to register triggerable actions,
+    meant to be global shortcuts.
   </description>
 
   <interface name="hyprland_global_shortcuts_manager_v1">
@@ -53,6 +53,13 @@
       <arg name="app_id" type="string" summary="the app_id of the application requesting the shortcut"/>
       <arg name="description" type="string" summary="user-readable text describing what the shortcut does."/>
       <arg name="trigger_description" type="string" summary="user-readable text describing how to trigger the shortcut for the client to render."/>
+    </request>
+
+    <request name="destroy" type="destructor">
+      <description summary="destroy the manager">
+        All objects created by the manager will still remain valid, until their
+        appropriate destroy request has been called.
+      </description>
     </request>
   </interface>
 
@@ -88,5 +95,11 @@
       <arg name="tv_nsec" type="uint"
            summary="nanoseconds part of the timestamp"/>
     </event>
+
+    <request name="destroy" type="destructor">
+      <description summary="delete this object, used or not">
+        Destroys the shortcut. Can be sent at any time by the client.
+      </description>
+    </request>
   </interface>
 </protocol>
