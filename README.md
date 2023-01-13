@@ -10,6 +10,7 @@ Since `wlr-protocols` is closed for new submissions, and `wayland-protocols` is 
 
 # Planned protocols
 - `hyprland_global_keybindings` -> for managing global keybinds via D-Bus.
+- `hyprland_window_management` -> for custom window managers / layouts.
 
 # Contributing
 Adding new protocols is *discouraged*. If the protocol has a good reason to be, and you have an impl ready, feel free to make a PR.
