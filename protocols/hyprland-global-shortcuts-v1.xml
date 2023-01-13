@@ -47,6 +47,8 @@
         A global shortcut is anonymous, meaning the app does not know what key(s) trigger it.
 
         The shortcut's keybinding shall be dealt with by the compositor.
+
+        In the case of a duplicate app_id + id combination, the already_taken protocol error is raised.
       </description>
       <arg name="shortcut" type="new_id" interface="hyprland_global_shortcut_v1"/>
       <arg name="id" type="string" summary="a unique id for the shortcut"/>
@@ -61,6 +63,11 @@
         appropriate destroy request has been called.
       </description>
     </request>
+
+    <enum name="error">
+      <entry name="already_taken" value="0"
+        summary="the app_id + id combination has already been registered."/>
+    </enum>
   </interface>
 
   <interface name="hyprland_global_shortcut_v1">
