@@ -35,7 +35,7 @@
     meant to be global shortcuts.
   </description>
 
-  <interface name="hyprland_global_shortcuts_manager_v1">
+  <interface name="hyprland_global_shortcuts_manager_v1" version="1">
     <description summary="manager to register global shortcuts">
       This object is a manager which offers requests to create global shortcuts.
     </description>
@@ -70,7 +70,7 @@
     </enum>
   </interface>
 
-  <interface name="hyprland_global_shortcut_v1">
+  <interface name="hyprland_global_shortcut_v1" version="1">
     <description summary="a shortcut">
       This object represents a single shortcut.
     </description>
