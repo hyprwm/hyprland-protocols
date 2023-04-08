@@ -8,7 +8,8 @@ hyprland_protocols_version = meson.project_version()
 fs = import('fs')
 
 protocols = {
-  'hyprland-toplevel-export': ['v1']
+  'hyprland-toplevel-export': ['v1'],
+  'hyprland-global-shortcuts': ['v1']
 }
 
 protocol_files = []
