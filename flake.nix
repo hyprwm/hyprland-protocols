@@ -33,6 +33,6 @@
       (self.overlays.default pkgsFor.${system} pkgsFor.${system})
       // {default = self.packages.${system}.hyprland-protocols;});
 
-    formatter = genSystems (system: pkgsFor.${system}.alejandra);
+    formatter = genSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
   };
 }
