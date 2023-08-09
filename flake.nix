@@ -16,7 +16,7 @@
     pkgsFor = genSystems (system:
       import nixpkgs {
         inherit system;
-        overlays = [self.overlays.default];
+        overlays = [self.overlays.hyprland-protocols];
       });
     mkDate = longDate: (lib.concatStringsSep "-" [
       (builtins.substring 0 4 longDate)
@@ -25,8 +25,11 @@
     ]);
     version = "0.1" + "+date=" + (mkDate (self.lastModifiedDate or "19700101")) + "_" + (self.shortRev or "dirty");
   in {
-    overlays.default = final: prev: {
-      hyprland-protocols = final.callPackage ./nix/default.nix {inherit version;};
+    overlays = {
+      hyprland-protocols = final: prev: {
+        hyprland-protocols = final.callPackage ./nix/default.nix {inherit version;};
+      };
+      default = self.overlays.hyprland-protocols;
     };
 
     packages = genSystems (system:
