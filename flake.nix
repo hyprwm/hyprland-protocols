@@ -34,9 +34,10 @@
       default = self.overlays.hyprland-protocols;
     };
 
-    packages = eachSystem (system:
-      (self.overlays.default pkgsFor.${system} pkgsFor.${system})
-      // {default = self.packages.${system}.hyprland-protocols;});
+    packages = eachSystem (system: {
+      inherit (pkgsFor.${system}) hyprland-protocols;
+      default = self.packages.${system}.hyprland-protocols;
+    });
 
     formatter = eachSystem (system: nixpkgs.legacyPackages.${system}.alejandra);
   };
