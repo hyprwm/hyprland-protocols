@@ -1,21 +1,23 @@
 {
   description = "Hyprland Protocols";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # <https://github.com/nix-systems/nix-systems>
+    systems.url = "github:nix-systems/default-linux";
+  };
 
   outputs = {
     self,
     nixpkgs,
+    systems,
     ...
   }: let
     inherit (nixpkgs) lib;
-    genSystems = lib.genAttrs [
-      "aarch64-linux"
-      "x86_64-linux"
-    ];
-    pkgsFor = genSystems (system:
+    eachSystem = lib.genAttrs (import systems);
+    pkgsFor = eachSystem (system:
       import nixpkgs {
-        inherit system;
+        localSystem = system;
         overlays = [self.overlays.hyprland-protocols];
       });
     mkDate = longDate: (lib.concatStringsSep "-" [
@@ -32,10 +34,10 @@
       default = self.overlays.hyprland-protocols;
     };
 
-    packages = genSystems (system:
+    packages = eachSystem (system:
       (self.overlays.default pkgsFor.${system} pkgsFor.${system})
       // {default = self.packages.${system}.hyprland-protocols;});
 
-    formatter = genSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
+    formatter = eachSystem (system: nixpkgs.legacyPackages.${system}.alejandra);
   };
 }
