@@ -1,22 +1,24 @@
 {
   description = "Hyprland Protocols";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # <https://github.com/nix-systems/nix-systems>
+    systems.url = "github:nix-systems/default-linux";
+  };
 
   outputs = {
     self,
     nixpkgs,
+    systems,
     ...
   }: let
     inherit (nixpkgs) lib;
-    genSystems = lib.genAttrs [
-      "aarch64-linux"
-      "x86_64-linux"
-    ];
-    pkgsFor = genSystems (system:
+    eachSystem = lib.genAttrs (import systems);
+    pkgsFor = eachSystem (system:
       import nixpkgs {
-        inherit system;
-        overlays = [self.overlays.default];
+        localSystem = system;
+        overlays = [self.overlays.hyprland-protocols];
       });
     mkDate = longDate: (lib.concatStringsSep "-" [
       (builtins.substring 0 4 longDate)
@@ -25,14 +27,18 @@
     ]);
     version = "0.1" + "+date=" + (mkDate (self.lastModifiedDate or "19700101")) + "_" + (self.shortRev or "dirty");
   in {
-    overlays.default = final: prev: {
-      hyprland-protocols = final.callPackage ./nix/default.nix {inherit version;};
+    overlays = {
+      hyprland-protocols = final: prev: {
+        hyprland-protocols = final.callPackage ./nix/default.nix {inherit version;};
+      };
+      default = self.overlays.hyprland-protocols;
     };
 
-    packages = genSystems (system:
-      (self.overlays.default pkgsFor.${system} pkgsFor.${system})
-      // {default = self.packages.${system}.hyprland-protocols;});
+    packages = eachSystem (system: {
+      inherit (pkgsFor.${system}) hyprland-protocols;
+      default = self.packages.${system}.hyprland-protocols;
+    });
 
-    formatter = genSystems (system: pkgsFor.${system}.alejandra);
+    formatter = eachSystem (system: nixpkgs.legacyPackages.${system}.alejandra);
   };
 }
