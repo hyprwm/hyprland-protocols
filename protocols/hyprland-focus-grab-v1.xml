@@ -61,10 +61,11 @@
       will clear the grab object. Keyboard events are passed to the last
       focused surface in the whitelist.
 
-      The compositor will clear the list of surfaces, rendering the grab object
-      inert, when receiving a mouse or touch input that is not inside one of
-      the specified surfaces. The list will also be cleared if another surface
-      grab is started through this protocol or xdg_popup::drag.
+      Upon meeting implementation-defined criteria usually meaning a mouse or
+      touch input outside of any whitelisted surfaces, the compositor will
+      clear the whitelist, rendering the grab inert and sending the cleared
+			event. The same will happen if another focus grab or similar action
+			is started at the compositor's discretion.
     </description>
 
     <request name="add_surface">
@@ -96,7 +97,7 @@
 
         If the list previously had no entries and now has at least one, the grab
         will start. If it previously had entries and now has none, the grab will
-        be removed.
+        become inert.
       </description>
     </request>
 
@@ -108,10 +109,10 @@
 
     <event name="cleared">
       <description summary="the focus grab was cleared">
-        Sent when an active grab is cancelled via an input outside of a
-        whitelisted surface, explicit removal of the last whitelisted
-        and comitted surface via remove_surface, or destruction of the last
-        whitelisted and comitted surface.
+        Sent when an active grab is cancelled by the compositor,
+        explicit removal of the last whitelisted and comitted surface
+        via remove_surface, or destruction of the last whitelisted
+        and comitted surface.
       </description>
     </event>
   </interface>
