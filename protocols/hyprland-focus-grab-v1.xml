@@ -121,9 +121,7 @@
     <event name="cleared">
       <description summary="the focus grab was cleared">
         Sent when an active grab is cancelled by the compositor,
-        explicit removal of the last whitelisted and comitted surface
-        via remove_surface, or destruction of the last whitelisted
-        and comitted surface.
+        regardless of cause.
       </description>
     </event>
   </interface>
