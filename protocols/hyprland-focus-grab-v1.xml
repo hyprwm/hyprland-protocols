@@ -48,6 +48,13 @@
 
       <arg name="grab" type="new_id" interface="hyprland_focus_grab_v1"/>
     </request>
+
+    <request name="destroy" type="destructor">
+      <description summary="destroy the focus grab manager">
+        Destroy the focus grab manager.
+        This doesn't destroy existing focus grab objects.
+      </description>
+    </request>
   </interface>
 
   <interface name="hyprland_focus_grab_v1" version="1">
