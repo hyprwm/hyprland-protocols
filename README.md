@@ -8,6 +8,7 @@ Since `wlr-protocols` is closed for new submissions, and `wayland-protocols` is 
 # Finished protocols
 - `hyprland_toplevel_export` -> for exporting toplevel buffers (aka. windows) for screensharing
 - `hyprland_global_keybindings` -> for managing global keybinds via D-Bus.
+- `hyprland_focus_grab` -> for grabbing input focus, primarily for complex context menus.
 
 # Contributing
 Adding new protocols is *discouraged*. If the protocol has a good reason to be, and you have an impl ready, feel free to make a PR.
