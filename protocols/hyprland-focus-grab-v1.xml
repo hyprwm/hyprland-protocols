@@ -58,14 +58,15 @@
 
       Mouse and touch events inside a whitelisted surface will be passed
       to the surface normally, while events outside of a whitelisted surface
-      will clear the grab object. Keyboard events are passed to the last
-      focused surface in the whitelist.
+      will clear the grab object. Keyboard events will be passed to the client
+      and a compositor-picked surface in the whitelist will receive a
+      wl_keyboard::enter event if a whitelisted surface is not already entered.
 
       Upon meeting implementation-defined criteria usually meaning a mouse or
       touch input outside of any whitelisted surfaces, the compositor will
       clear the whitelist, rendering the grab inert and sending the cleared
-			event. The same will happen if another focus grab or similar action
-			is started at the compositor's discretion.
+      event. The same will happen if another focus grab or similar action
+      is started at the compositor's discretion.
     </description>
 
     <request name="add_surface">
@@ -84,6 +85,9 @@
       <description summary="remove a surface from the focus whitelist">
         Remove a surface from the whitelist. Destroying the surface is treated
         the same as an explicit call to this function.
+
+        If the grab was active and the removed surface was entered by the
+        keyboard, another surface will be entered on commit.
 
         Does not take effect until commit is called.
       </description>
