@@ -1,5 +1,5 @@
 project('hyprland-protocols',
-	version: '0.2',
+	version: '0.3.0',
 	meson_version: '>= 0.55.0',
 )
 
