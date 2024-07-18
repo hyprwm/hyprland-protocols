@@ -1,6 +1,6 @@
 project('hyprland-protocols',
-	version: '0.3.0',
-	meson_version: '>= 0.55.0',
+	version: run_command('cat', 'VERSION', check: true).stdout().strip(),
+	meson_version: '>= 0.60.3',
 )
 
 hyprland_protocols_version = meson.project_version()
