@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<protocol name="hyprland_input_capture_v1">
+
+  <copyright>
+    Copyright © 2024 Fl0w
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+
+    1. Redistributions of source code must retain the above copyright notice, this
+    list of conditions and the following disclaimer.
+
+    2. Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions and the following disclaimer in the documentation
+    and/or other materials provided with the distribution.
+
+    3. Neither the name of the copyright holder nor the names of its
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+    FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+    DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+    SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+    CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+    OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  </copyright>
+
+  <description summary="capture the inputs for sending it to a window">
+    This protocol allows clients to create bordel for when the mouse cross,
+    the inputs are send to the client.
+
+    Usefull for implementing the input capture portal.
+  </description>
+
+  <interface name="hyprland_input_capture_manager_v1" version="1">
+    <description summary="manager for capturing inputs">
+      This interface allow a client to capture inputs and receive events
+    </description>
+
+    <request name="capture">
+      <description summary="start capture">
+        Start the capturing of inputs.
+      </description>
+    </request>
+
+    <request name="release">
+      <description summary="end capture">
+        End the capturing of inputs.
+      </description>
+    </request>
+
+    <event name="absolute_motion">
+      <description summary="pointer motion">
+        Event trigger when the mouse cursor mouse. It contains
+        the absolute position of x and y and also the relative motion of the pointer.
+        Note that the dx and dy vectors can be accelerated, please use the relative motion protocol
+        for unaccelerated inputs.
+      </description>
+      <arg name="x"
+        type="fixed"
+        summary="the x position of the cursor" />
+      <arg name="y" type="fixed"
+        summary="the y position of the cursor" />
+      <arg name="dx" type="fixed"
+        summary="the x component of the motion vector" />
+      <arg name="dy" type="fixed"
+        summary="the y component of the motion vector" />
+    </event>
+
+  </interface>
+</protocol>
