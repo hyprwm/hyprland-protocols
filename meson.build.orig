@@ -12,8 +12,11 @@ protocols = {
   'hyprland-global-shortcuts': ['v1'],
   'hyprland-focus-grab': ['v1'],
   'hyprland-ctm-control': ['v1'],
+<<<<<<< HEAD
   'hyprland-surface': ['v1'],
+=======
   'hyprland-input-capture': ['v1'],
+>>>>>>> f9641d6 (WIP: input capture)
 }
 
 protocol_files = []
