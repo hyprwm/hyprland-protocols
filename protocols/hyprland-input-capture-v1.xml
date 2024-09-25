@@ -73,5 +73,137 @@
         summary="the y component of the motion vector" />
     </event>
 
+    <enum name="key_state">
+      <description summary="physical key state">
+        Describes the physical state of a key that produced the key event.
+      </description>
+      <entry name="released" value="0" summary="key is not pressed" />
+      <entry name="pressed" value="1" summary="key is pressed" />
+    </enum>
+
+    <event name="key">
+      <description summary="key event">
+        A key was pressed or released.
+        The key is a platform-specific key code that can be interpreted
+        by feeding it to the keyboard mapping (see the keymap event).
+      </description>
+      <arg name="key" type="uint" summary="key that produced the event" />
+      <arg name="state" type="uint" enum="key_state" summary="physical state of the key" />
+    </event>
+
+    <enum name="button_state">
+      <description summary="physical button state">
+        Describes the physical state of a button that produced the button
+        event.
+      </description>
+      <entry name="released" value="0" summary="the button is not pressed" />
+      <entry name="pressed" value="1" summary="the button is pressed" />
+    </enum>
+
+    <event name="button">
+      <description summary="pointer button event">
+        Mouse button click and release notifications.
+
+        The location of the click is given by the last motion or
+        enter event.
+
+        The button is a button code as defined in the Linux kernel's
+        linux/input-event-codes.h header file, e.g. BTN_LEFT.
+      </description>
+      <arg name="button" type="uint" summary="button that produced the event" />
+      <arg name="state" type="uint" enum="button_state" summary="physical state of the button" />
+    </event>
+
+    <enum name="axis">
+      <description summary="axis types">
+        Describes the axis types of scroll events.
+      </description>
+      <entry name="vertical_scroll" value="0" summary="vertical axis" />
+      <entry name="horizontal_scroll" value="1" summary="horizontal axis" />
+    </enum>
+
+    <event name="axis">
+      <description summary="axis event">
+        Scroll and other axis notifications.
+
+        For scroll events (vertical and horizontal scroll axes), the
+        value parameter is the length of a vector along the specified
+        axis in a coordinate space identical to those of motion events,
+        representing a relative movement along the specified axis.
+
+        For devices that support movements non-parallel to axes multiple
+        axis events will be emitted.
+
+        When applicable, for example for touch pads, the server can
+        choose to emit scroll events where the motion vector is
+        equivalent to a motion event vector.
+
+        When applicable, a client can transform its content relative to the
+        scroll distance.
+      </description>
+      <arg name="axis" type="uint" enum="axis" summary="axis type" />
+      <arg name="value" type="fixed" summary="length of vector in surface-local coordinate space" />
+    </event>
+
+    <event name="axis_value120">
+      <description summary="axis high-resolution scroll event">
+        Discrete high-resolution scroll information.
+
+        This event carries high-resolution wheel scroll information,
+        with each multiple of 120 representing one logical scroll step
+        (a wheel detent). For example, an axis_value120 of 30 is one quarter of
+        a logical scroll step in the positive direction, a value120 of
+        -240 are two logical scroll steps in the negative direction within the
+        same hardware event.
+        Clients that rely on discrete scrolling should accumulate the
+        value120 to multiples of 120 before processing the event.
+
+        The value120 must not be zero.
+      </description>
+      <arg name="axis" type="uint" enum="axis" summary="axis type" />
+      <arg name="value120" type="int" summary="scroll distance as fraction of 120" />
+    </event>
+
+    <event name="axis_stop">
+      <description summary="axis stop event">
+        Stop notification for scroll and other axes.
+
+        A axis_stop event can be sent to notify a client that the
+        axis sequence has terminated.
+        This enables the client to implement kinetic scrolling.
+
+        The timestamp is to be interpreted identical to the timestamp in the
+        axis event. The timestamp value may be the same as a
+        preceding axis event.
+      </description>
+      <arg name="axis" type="uint" enum="axis" summary="the axis stopped with this event" />
+    </event>
+
+    <event name="frame">
+      <description summary="end of a pointer event sequence">
+        Indicates the end of a set of events that logically belong together.
+        A client is expected to accumulate the data in all events within the
+        frame before proceeding.
+
+        All wl_pointer events before a frame event belong
+        logically together. For example, in a diagonal scroll motion the
+        compositor will two axis events (horizontal and vertical) and
+        a frame event. The client may use this information to
+        calculate a diagonal vector for scrolling.
+
+        When multiple axis events occur within the same frame,
+        the motion vector is the combined motion of all events.
+        When a axis and a wl_pointer.axis_stop event occur within
+        the same frame, this indicates that axis movement in one axis has
+        stopped but continues in the other axis.
+        When multiple axis_stop events occur within the same
+        frame, this indicates that these axes stopped in the same instance.
+
+        A frame event is sent for every logical event group,
+        even if the group only contains a single wl_pointer event.
+        Specifically, a client may get a sequence: motion, frame, button,
+        frame, axis, frame, axis_stop, frame.
+      </description>
+    </event>
   </interface>
 </protocol>
