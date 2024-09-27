@@ -28,11 +28,12 @@
     version = lib.removeSuffix "\n" (builtins.readFile ./VERSION);
   in {
     overlays = {
-      hyprland-protocols = final: prev: {
-        hyprland-protocols = final.callPackage ./nix/default.nix {inherit version;};
-        version = version + "+date=" + (mkDate (self.lastModifiedDate or "19700101")) + "_" + (self.shortRev or "dirty");
-      };
       default = self.overlays.hyprland-protocols;
+      hyprland-protocols = final: prev: {
+        hyprland-protocols = final.callPackage ./nix/default.nix {
+          version = version + "+date=" + (mkDate (self.lastModifiedDate or "19700101")) + "_" + (self.shortRev or "dirty");
+        };
+      };
     };
 
     packages = eachSystem (system: {
