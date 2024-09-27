@@ -25,12 +25,12 @@
       (builtins.substring 4 2 longDate)
       (builtins.substring 6 2 longDate)
     ]);
-    version = lib.removeSuffix "\n" (builtins.readFile ./VERSION);
+    versionNumber = lib.removeSuffix "\n" (builtins.readFile ./VERSION);
+    version = versionNumber + "+date=" + (mkDate (self.lastModifiedDate or "19700101")) + "_" + (self.shortRev or "dirty");
   in {
     overlays = {
       hyprland-protocols = final: prev: {
         hyprland-protocols = final.callPackage ./nix/default.nix {inherit version;};
-        version = version + "+date=" + (mkDate (self.lastModifiedDate or "19700101")) + "_" + (self.shortRev or "dirty");
       };
       default = self.overlays.hyprland-protocols;
     };
