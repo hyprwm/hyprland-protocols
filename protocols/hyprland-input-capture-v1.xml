@@ -32,15 +32,15 @@
   </copyright>
 
   <description summary="capture the inputs for sending it to a window">
-    This protocol allows clients to create bordel for when the mouse cross,
-    the inputs are send to the client.
+    This protocol allows clients to create borders, for which after crossing,
+    mouse events will be forwarded to the client
 
-    Usefull for implementing the input capture portal.
+    Useful for implementing the input capture portal.
   </description>
 
   <interface name="hyprland_input_capture_manager_v1" version="1">
     <description summary="manager for capturing inputs">
-      This interface allow a client to capture inputs and receive events
+      This interface allows a client to capture inputs and receive events
     </description>
 
     <request name="capture">
@@ -55,11 +55,15 @@
       </description>
     </request>
 
-    <event name="absolute_motion">
+    <event name="motion">
       <description summary="pointer motion">
-        Event trigger when the mouse cursor mouse. It contains
-        the absolute position of x and y and also the relative motion of the pointer.
-        Note that the dx and dy vectors can be accelerated, please use the relative motion protocol
+        Notification of pointer location change.
+
+        It contains the absolute position of x and y and also the
+        relative motion of the pointer.
+
+        Note that the dx and dy vectors can be accelerated,
+        please use the relative motion protocol
         for unaccelerated inputs.
       </description>
       <arg name="x"
@@ -84,6 +88,7 @@
     <event name="key">
       <description summary="key event">
         A key was pressed or released.
+
         The key is a platform-specific key code that can be interpreted
         by feeding it to the keyboard mapping (see the keymap event).
       </description>
