@@ -3,7 +3,9 @@ Wayland protocol extensions for Hyprland.
 
 This repository exists in an effort to bridge the gap between Hyprland and KDE/Gnome's functionality.
 
-Since `wlr-protocols` is closed for new submissions, and `wayland-protocols` is very slow with changes, this repo will hold protocols used by Hyprland to bridge the aforementioned gap.
+Since `wayland-protocols` is slow to change (on top of Hyprland not being allowed to contribute), we have to maintain
+a set of protocols Hyprland uses to plumb some things / add a few minor features. Most of the protocols here are small,
+hyprland-exclusive plumbing protocols anyways.
 
 # Finished protocols
 - `hyprland_toplevel_export` -> for exporting toplevel buffers (aka. windows) for screensharing
