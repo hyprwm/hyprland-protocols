@@ -69,6 +69,12 @@
       <arg name="mat8" type="fixed"/>
     </request>
 
+    <request name="commit">
+      <description summary="commit the pending state">
+        Commits the pending state(s) set by set_ctm_for_output.
+      </description>
+    </request>
+
     <request name="destroy" type="destructor">
       <description summary="destroy the manager">
         All objects created by the manager will still remain valid, until their
