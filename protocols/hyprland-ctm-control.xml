@@ -54,6 +54,8 @@
         The provided values describe a 3x3 Row-Major CTM with values in the range of [0, ∞)
 
         Passing values outside of the range will raise an invalid_matrix error.
+
+        The default value of the CTM is an identity matrix.
       </description>
       <arg name="output" type="object" interface="wl_output"/>
       <arg name="mat0" type="fixed"/>
