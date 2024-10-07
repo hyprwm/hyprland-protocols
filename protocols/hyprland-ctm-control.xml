@@ -56,6 +56,9 @@
         Passing values outside of the range will raise an invalid_matrix error.
 
         The default value of the CTM is an identity matrix.
+
+        If an output doesn't get a CTM set with set_ctm_for_output and commit is called,
+        that output will get its CTM reset to an identity matrix.
       </description>
       <arg name="output" type="object" interface="wl_output"/>
       <arg name="mat0" type="fixed"/>
