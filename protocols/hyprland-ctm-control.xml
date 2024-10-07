@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<protocol name="hyprland_global_shortcuts_v1">
+<protocol name="hyprland_ctm_control_v1">
   <copyright>
     Copyright © 2024 Vaxry
     All rights reserved.
