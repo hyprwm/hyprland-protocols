@@ -2,7 +2,11 @@
 <protocol name="hyprland_input_capture_v1">
 
   <copyright>
+    Copyright © 2008-2011 Kristian Høgsberg
+    Copyright © 2010-2011 Intel Corporation
+    Copyright © 2012-2013 Collabora, Ltd.
     Copyright © 2024 Fl0w
+
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
@@ -75,6 +79,28 @@
         summary="the x component of the motion vector" />
       <arg name="dy" type="fixed"
         summary="the y component of the motion vector" />
+    </event>
+
+    <enum name="keymap_format">
+      <description summary="keyboard mapping format">
+        This specifies the format of the keymap provided to the
+        client with the keymap event.
+      </description>
+      <entry name="no_keymap" value="0"
+        summary="no keymap; client must understand how to interpret the raw keycode" />
+      <entry name="xkb_v1" value="1"
+        summary="libxkbcommon compatible, null-terminated string; to determine the xkb keycode, clients must add 8 to the key event keycode" />
+    </enum>
+
+    <event name="keymap">
+      <description summary="keyboard mapping">
+        This event provides a file descriptor to the client which can be
+        memory-mapped in read-only mode to provide a keyboard mapping
+        description.
+      </description>
+      <arg name="format" type="uint" enum="keymap_format" summary="keymap format" />
+      <arg name="fd" type="fd" summary="keymap file descriptor" />
+      <arg name="size" type="uint" summary="keymap size, in bytes" />
     </event>
 
     <enum name="key_state">
@@ -190,7 +216,7 @@
         A client is expected to accumulate the data in all events within the
         frame before proceeding.
 
-        All wl_pointer events before a frame event belong
+        All pointer events before a frame event belong
         logically together. For example, in a diagonal scroll motion the
         compositor will two axis events (horizontal and vertical) and
         a frame event. The client may use this information to
@@ -198,14 +224,14 @@
 
         When multiple axis events occur within the same frame,
         the motion vector is the combined motion of all events.
-        When a axis and a wl_pointer.axis_stop event occur within
+        When a axis and a axis_stop event occur within
         the same frame, this indicates that axis movement in one axis has
         stopped but continues in the other axis.
         When multiple axis_stop events occur within the same
         frame, this indicates that these axes stopped in the same instance.
 
         A frame event is sent for every logical event group,
-        even if the group only contains a single wl_pointer event.
+        even if the group only contains a single pointer event.
         Specifically, a client may get a sequence: motion, frame, button,
         frame, axis, frame, axis_stop, frame.
       </description>
