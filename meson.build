@@ -11,6 +11,7 @@ protocols = {
   'hyprland-toplevel-export': ['v1'],
   'hyprland-global-shortcuts': ['v1'],
   'hyprland-focus-grab': ['v1'],
+  'hyprland-ctm-control': ['v1'],
 }
 
 protocol_files = []
