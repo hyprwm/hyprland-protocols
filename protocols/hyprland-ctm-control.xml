@@ -51,7 +51,7 @@
         This state is not applied immediately; clients must call .commit to
         apply any pending changes.
 
-        The provided values describe a 3x3 Row-Major CTM with values in the range of [0.0-1.0]
+        The provided values describe a 3x3 Row-Major CTM with values in the range of [0, ∞)
 
         Passing values outside of the range will raise an invalid_matrix error.
       </description>
