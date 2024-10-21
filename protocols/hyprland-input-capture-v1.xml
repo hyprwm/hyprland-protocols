@@ -59,6 +59,13 @@
       </description>
     </request>
 
+    <event name="force_release">
+      <description summary="force release">
+        This event is triggered by the compositor to tell that he has
+        released the capture of inputs
+      </description>
+    </event>
+
     <event name="motion">
       <description summary="pointer motion">
         Notification of pointer location change.
