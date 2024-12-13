@@ -129,6 +129,28 @@
       <arg name="state" type="uint" enum="key_state" summary="physical state of the key" />
     </event>
 
+    <event name="modifiers">
+      <description summary="modifier and group state">
+        Notifies clients that the modifier and/or group state has
+        changed, and it should update its local state.
+
+        The compositor may send this event without a surface of the client
+        having keyboard focus, for example to tie modifier information to
+        pointer focus instead. If a modifier event with pressed modifiers is sent
+        without a prior enter event, the client can assume the modifier state is
+        valid until it receives the next modifiers event. In order to
+        reset the modifier state again, the compositor can send a
+        modifiers event with no pressed modifiers.
+
+        In the wl_keyboard logical state, this event updates the modifiers and
+        group.
+      </description>
+      <arg name="mods_depressed" type="uint" summary="depressed modifiers"/>
+      <arg name="mods_latched" type="uint" summary="latched modifiers"/>
+      <arg name="mods_locked" type="uint" summary="locked modifiers"/>
+      <arg name="group" type="uint" summary="keyboard layout"/>
+    </event>
+
     <enum name="button_state">
       <description summary="physical button state">
         Describes the physical state of a button that produced the button
