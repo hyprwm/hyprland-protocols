@@ -15,6 +15,7 @@ Some of the protocols here also do not belong in w-p, as they are specific to Hy
 - `hyprland_focus_grab` -> for grabbing input focus, primarily for complex context menus.
 - `hyprland_ctm_control` -> for managing CTMs of displays. See [hyprsunset](https://github.com/hyprwm/hyprsunset)
 - `hyprland_surface` -> for setting hyprland specific wl_surface properties.
+- `hyprland_lock_notify` -> for notifying a client about the screen being locked and unlocked.
 
 # Contributing
 Adding new protocols is *discouraged*, as most things you think of can already be done one way or another.
