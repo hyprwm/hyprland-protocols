@@ -57,7 +57,7 @@ configure_file(
 
 hyprland_protocols = declare_dependency(
 	variables: {
-		'pkgdatadir': hyprland_protocols_srcdir,
+		'pkgdatadir': fs.is_dir('/usr/share/hyprland-protocols') ? '/usr/share/hyprland-protocols' : hyprland_protocols_srcdir,
 	},
 )
 
