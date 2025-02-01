@@ -36,7 +36,7 @@
     This protocol is privileged and should not be exposed to unprivileged clients.
   </description>
 
-  <interface name="hyprland_ctm_control_manager_v1" version="1">
+  <interface name="hyprland_ctm_control_manager_v1" version="2">
     <description summary="manager to control CTMs">
       This object is a manager which offers requests to control CTMs.
 
@@ -91,5 +91,16 @@
       <entry name="invalid_matrix" value="0"
         summary="the matrix values are invalid."/>
     </enum>
+
+    <event name="blocked" version="2">
+      <description>
+        This event is sent if another manager was bound by any client
+        at the time the current manager was bound.
+        Any set_ctm_for_output requests from a blocked manager will be
+        silently ignored by the compositor.
+
+        The client should destroy the manager after receiving this event.
+      </description>
+    </event>
   </interface>
 </protocol>
