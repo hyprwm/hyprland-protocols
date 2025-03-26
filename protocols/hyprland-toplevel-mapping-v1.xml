@@ -75,6 +75,48 @@
       />
     </request>
 
+    <request name="get_toplevel_for_window">
+      <description summary="get wlr toplevel for window address">
+        Get the toplevel for a window address
+      </description>
+      <arg
+        name="handle"
+        type="new_id"
+        interface="hyprland_window_toplevel_mapping_handle_v1"
+      />
+      <arg
+        name="window_address"
+        type="uint"
+        summary="lower 32 bits of the window address"
+      />
+      <arg
+        name="window_address_hi"
+        type="uint"
+        summary="upper 32 bits of the window address"
+      />
+    </request>
+
+    <request name="get_toplevel_wlr_for_window">
+      <description summary="get wlr toplevel for window address">
+        Get the wlr toplevel for a window address
+      </description>
+      <arg
+        name="handle"
+        type="new_id"
+        interface="hyprland_window_wlr_toplevel_mapping_handle_v1"
+      />
+      <arg
+        name="window_address"
+        type="uint"
+        summary="lower 32 bits of the window address"
+      />
+      <arg
+        name="window_address_hi"
+        type="uint"
+        summary="upper 32 bits of the window address"
+      />
+    </request>
+
     <request name="destroy" type="destructor">
       <description summary="destroy the manager">
         All objects created by the manager will still remain valid, until their appropriate destroy
