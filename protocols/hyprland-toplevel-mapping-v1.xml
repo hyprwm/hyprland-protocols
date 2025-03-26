@@ -216,7 +216,7 @@
       <arg
         name="handle"
         type="new_id"
-        interface="wlr_foreign_toplevel_handle_v1"
+        interface="zwlr_foreign_toplevel_handle_v1"
         summary="wlr toplevel associated with the window"
       />
     </event>
