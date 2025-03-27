@@ -157,12 +157,6 @@
         exist (anymore).
       </description>
     </event>
-
-    <request name="destroy" type="destructor">
-      <description summary="destroy handle">
-        Destroy the handle. This request can be sent at any time by the client.
-      </description>
-    </request>
   </interface>
 
   <interface name="hyprland_window_toplevel_mapping_handle_v1" version="1">
@@ -192,12 +186,6 @@
         exist (anymore).
       </description>
     </event>
-
-    <request name="destroy" type="destructor">
-      <description summary="destroy handle">
-        Destroy the handle. This request can be sent at any time by the client.
-      </description>
-    </request>
   </interface>
 
   <interface name="hyprland_window_wlr_toplevel_mapping_handle_v1" version="1">
@@ -227,11 +215,5 @@
         exist (anymore).
       </description>
     </event>
-
-    <request name="destroy" type="destructor">
-      <description summary="destroy handle">
-        Destroy the handle. This request can be sent at any time by the client.
-      </description>
-    </request>
   </interface>
 </protocol>
