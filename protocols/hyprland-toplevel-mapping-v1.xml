@@ -30,15 +30,14 @@
     OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </copyright>
 
-  <description summary="mapping between toplevels and windows">
-    This protocol allows clients to retrieve the mapping of toplevels to hyprland window addresses
-    and vice versa.
+  <description summary="mapping of toplevels to windows">
+    This protocol allows clients to retrieve the mapping of toplevels to hyprland window addresses.
   </description>
 
   <interface name="hyprland_toplevel_mapping_manager_v1" version="1">
     <description summary="manager to request toplevel mappings">
       This object is a manager which offers requests to retrieve a window address
-      for a toplevel or to get a (wlr) toplevel for a window address.
+      for a toplevel.
     </description>
 
     <request name="get_window_for_toplevel">
@@ -72,48 +71,6 @@
         type="object"
         interface="zwlr_foreign_toplevel_handle_v1"
         summary="wlr toplevel to get the window address for"
-      />
-    </request>
-
-    <request name="get_toplevel_for_window">
-      <description summary="get wlr toplevel for window address">
-        Get the toplevel for a window address
-      </description>
-      <arg
-        name="handle"
-        type="new_id"
-        interface="hyprland_window_toplevel_mapping_handle_v1"
-      />
-      <arg
-        name="window_address"
-        type="uint"
-        summary="lower 32 bits of the window address"
-      />
-      <arg
-        name="window_address_hi"
-        type="uint"
-        summary="upper 32 bits of the window address"
-      />
-    </request>
-
-    <request name="get_toplevel_wlr_for_window">
-      <description summary="get wlr toplevel for window address">
-        Get the wlr toplevel for a window address
-      </description>
-      <arg
-        name="handle"
-        type="new_id"
-        interface="hyprland_window_wlr_toplevel_mapping_handle_v1"
-      />
-      <arg
-        name="window_address"
-        type="uint"
-        summary="lower 32 bits of the window address"
-      />
-      <arg
-        name="window_address_hi"
-        type="uint"
-        summary="upper 32 bits of the window address"
       />
     </request>
 
@@ -154,64 +111,6 @@
     <event name="failed">
       <description summary="mapping failed">
         The mapping of the toplevel to a window address failed. Most likely the window does not
-        exist (anymore).
-      </description>
-    </event>
-  </interface>
-
-  <interface name="hyprland_window_toplevel_mapping_handle_v1" version="1">
-    <description summary="window to toplevel mapping">
-      This object represents a mapping of window address to a toplevel.
-
-      Once created, the `toplevel` event will be sent containing the handle to the associated
-      toplevel.
-      Should the mapping fail, the `failed` event will be sent.
-    </description>
-
-    <event name="toplevel">
-      <description summary="toplevel">
-        The requested toplevel
-      </description>
-      <arg
-        name="handle"
-        type="new_id"
-        interface="ext_foreign_toplevel_handle_v1"
-        summary="toplevel associated with the window"
-      />
-    </event>
-
-    <event name="failed">
-      <description summary="mapping failed">
-        The mapping of the window address to a toplevel failed. Most likely the window does not
-        exist (anymore).
-      </description>
-    </event>
-  </interface>
-
-  <interface name="hyprland_window_wlr_toplevel_mapping_handle_v1" version="1">
-    <description summary="window to wlr toplevel mapping">
-      This object represents a mapping of window address to a wlr toplevel.
-
-      Once created, the `toplevel` event will be sent containing the handle to the associated wlr
-      toplevel.
-      Should the mapping fail, the `failed` event will be sent.
-    </description>
-
-    <event name="toplevel">
-      <description summary="toplevel">
-        The requested wlr toplevel
-      </description>
-      <arg
-        name="handle"
-        type="new_id"
-        interface="zwlr_foreign_toplevel_handle_v1"
-        summary="wlr toplevel associated with the window"
-      />
-    </event>
-
-    <event name="failed">
-      <description summary="mapping failed">
-        The mapping of the window address to a wlr toplevel failed. Most likely the window does not
         exist (anymore).
       </description>
     </event>
