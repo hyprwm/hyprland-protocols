@@ -114,5 +114,11 @@
         exist (anymore).
       </description>
     </event>
+
+    <request name="destroy" type="destructor">
+      <description summary="destroy handle">
+        Destroy the handle. This request can be sent at any time by the client.
+      </description>
+    </request>
   </interface>
 </protocol>
