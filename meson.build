@@ -9,6 +9,7 @@ fs = import('fs')
 
 protocols = {
   'hyprland-toplevel-export': ['v1'],
+  'hyprland-toplevel-mapping': ['v1'],
   'hyprland-global-shortcuts': ['v1'],
   'hyprland-focus-grab': ['v1'],
   'hyprland-ctm-control': ['v1'],
