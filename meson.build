@@ -15,6 +15,7 @@ protocols = {
   'hyprland-ctm-control': ['v1'],
   'hyprland-surface': ['v1'],
   'hyprland-lock-notify': ['v1'],
+  'hyprland-input-capture': ['v1'],
 }
 
 protocol_files = []

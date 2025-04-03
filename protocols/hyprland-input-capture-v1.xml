@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<protocol name="hyprland_input_capture_v1">
+
+  <copyright>
+    Copyright © 2008-2011 Kristian Høgsberg
+    Copyright © 2010-2011 Intel Corporation
+    Copyright © 2012-2013 Collabora, Ltd.
+    Copyright © 2024 Fl0w
+
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+
+    1. Redistributions of source code must retain the above copyright notice, this
+    list of conditions and the following disclaimer.
+
+    2. Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions and the following disclaimer in the documentation
+    and/or other materials provided with the distribution.
+
+    3. Neither the name of the copyright holder nor the names of its
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+    FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+    DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+    SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+    CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+    OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  </copyright>
+
+  <description summary="capture the inputs for sending it to a window">
+    This protocol allows clients to create borders, for which after crossing,
+    mouse events will be forwarded to the client
+
+    Useful for implementing the input capture portal.
+  </description>
+
+  <interface name="hyprland_input_capture_manager_v1" version="1">
+    <description summary="manager for capturing inputs">
+      This interface allows a client to capture inputs and receive events
+    </description>
+
+    <request name="capture">
+      <description summary="start capture">
+        Start the capturing of inputs.
+      </description>
+    </request>
+
+    <request name="release">
+      <description summary="end capture">
+        End the capturing of inputs.
+      </description>
+    </request>
+
+    <event name="force_release">
+      <description summary="force release">
+        This event is triggered by the compositor to tell that he has
+        released the capture of inputs
+      </description>
+    </event>
+
+    <event name="motion">
+      <description summary="pointer motion">
+        Notification of pointer location change.
+
+        It contains the absolute position of x and y and also the
+        relative motion of the pointer.
+
+        Note that the dx and dy vectors can be accelerated,
+        please use the relative motion protocol
+        for unaccelerated inputs.
+      </description>
+      <arg name="x"
+        type="fixed"
+        summary="the x position of the cursor" />
+      <arg name="y" type="fixed"
+        summary="the y position of the cursor" />
+      <arg name="dx" type="fixed"
+        summary="the x component of the motion vector" />
+      <arg name="dy" type="fixed"
+        summary="the y component of the motion vector" />
+    </event>
+
+    <enum name="keymap_format">
+      <description summary="keyboard mapping format">
+        This specifies the format of the keymap provided to the
+        client with the keymap event.
+      </description>
+      <entry name="no_keymap" value="0"
+        summary="no keymap; client must understand how to interpret the raw keycode" />
+      <entry name="xkb_v1" value="1"
+        summary="libxkbcommon compatible, null-terminated string; to determine the xkb keycode, clients must add 8 to the key event keycode" />
+    </enum>
+
+    <event name="keymap">
+      <description summary="keyboard mapping">
+        This event provides a file descriptor to the client which can be
+        memory-mapped in read-only mode to provide a keyboard mapping
+        description.
+      </description>
+      <arg name="format" type="uint" enum="keymap_format" summary="keymap format" />
+      <arg name="fd" type="fd" summary="keymap file descriptor" />
+      <arg name="size" type="uint" summary="keymap size, in bytes" />
+    </event>
+
+    <enum name="key_state">
+      <description summary="physical key state">
+        Describes the physical state of a key that produced the key event.
+      </description>
+      <entry name="released" value="0" summary="key is not pressed" />
+      <entry name="pressed" value="1" summary="key is pressed" />
+    </enum>
+
+    <event name="key">
+      <description summary="key event">
+        A key was pressed or released.
+
+        The key is a platform-specific key code that can be interpreted
+        by feeding it to the keyboard mapping (see the keymap event).
+      </description>
+      <arg name="key" type="uint" summary="key that produced the event" />
+      <arg name="state" type="uint" enum="key_state" summary="physical state of the key" />
+    </event>
+
+    <event name="modifiers">
+      <description summary="modifier and group state">
+        Notifies clients that the modifier and/or group state has
+        changed, and it should update its local state.
+
+        The compositor may send this event without a surface of the client
+        having keyboard focus, for example to tie modifier information to
+        pointer focus instead. If a modifier event with pressed modifiers is sent
+        without a prior enter event, the client can assume the modifier state is
+        valid until it receives the next modifiers event. In order to
+        reset the modifier state again, the compositor can send a
+        modifiers event with no pressed modifiers.
+
+        In the wl_keyboard logical state, this event updates the modifiers and
+        group.
+      </description>
+      <arg name="mods_depressed" type="uint" summary="depressed modifiers"/>
+      <arg name="mods_latched" type="uint" summary="latched modifiers"/>
+      <arg name="mods_locked" type="uint" summary="locked modifiers"/>
+      <arg name="group" type="uint" summary="keyboard layout"/>
+    </event>
+
+    <enum name="button_state">
+      <description summary="physical button state">
+        Describes the physical state of a button that produced the button
+        event.
+      </description>
+      <entry name="released" value="0" summary="the button is not pressed" />
+      <entry name="pressed" value="1" summary="the button is pressed" />
+    </enum>
+
+    <event name="button">
+      <description summary="pointer button event">
+        Mouse button click and release notifications.
+
+        The location of the click is given by the last motion or
+        enter event.
+
+        The button is a button code as defined in the Linux kernel's
+        linux/input-event-codes.h header file, e.g. BTN_LEFT.
+      </description>
+      <arg name="button" type="uint" summary="button that produced the event" />
+      <arg name="state" type="uint" enum="button_state" summary="physical state of the button" />
+    </event>
+
+    <enum name="axis">
+      <description summary="axis types">
+        Describes the axis types of scroll events.
+      </description>
+      <entry name="vertical_scroll" value="0" summary="vertical axis" />
+      <entry name="horizontal_scroll" value="1" summary="horizontal axis" />
+    </enum>
+
+    <event name="axis">
+      <description summary="axis event">
+        Scroll and other axis notifications.
+
+        For scroll events (vertical and horizontal scroll axes), the
+        value parameter is the length of a vector along the specified
+        axis in a coordinate space identical to those of motion events,
+        representing a relative movement along the specified axis.
+
+        For devices that support movements non-parallel to axes multiple
+        axis events will be emitted.
+
+        When applicable, for example for touch pads, the server can
+        choose to emit scroll events where the motion vector is
+        equivalent to a motion event vector.
+
+        When applicable, a client can transform its content relative to the
+        scroll distance.
+      </description>
+      <arg name="axis" type="uint" enum="axis" summary="axis type" />
+      <arg name="value" type="fixed" summary="length of vector in surface-local coordinate space" />
+    </event>
+
+    <event name="axis_value120">
+      <description summary="axis high-resolution scroll event">
+        Discrete high-resolution scroll information.
+
+        This event carries high-resolution wheel scroll information,
+        with each multiple of 120 representing one logical scroll step
+        (a wheel detent). For example, an axis_value120 of 30 is one quarter of
+        a logical scroll step in the positive direction, a value120 of
+        -240 are two logical scroll steps in the negative direction within the
+        same hardware event.
+        Clients that rely on discrete scrolling should accumulate the
+        value120 to multiples of 120 before processing the event.
+
+        The value120 must not be zero.
+      </description>
+      <arg name="axis" type="uint" enum="axis" summary="axis type" />
+      <arg name="value120" type="int" summary="scroll distance as fraction of 120" />
+    </event>
+
+    <event name="axis_stop">
+      <description summary="axis stop event">
+        Stop notification for scroll and other axes.
+
+        A axis_stop event can be sent to notify a client that the
+        axis sequence has terminated.
+        This enables the client to implement kinetic scrolling.
+
+        The timestamp is to be interpreted identical to the timestamp in the
+        axis event. The timestamp value may be the same as a
+        preceding axis event.
+      </description>
+      <arg name="axis" type="uint" enum="axis" summary="the axis stopped with this event" />
+    </event>
+
+    <event name="frame">
+      <description summary="end of a pointer event sequence">
+        Indicates the end of a set of events that logically belong together.
+        A client is expected to accumulate the data in all events within the
+        frame before proceeding.
+
+        All pointer events before a frame event belong
+        logically together. For example, in a diagonal scroll motion the
+        compositor will two axis events (horizontal and vertical) and
+        a frame event. The client may use this information to
+        calculate a diagonal vector for scrolling.
+
+        When multiple axis events occur within the same frame,
+        the motion vector is the combined motion of all events.
+        When a axis and a axis_stop event occur within
+        the same frame, this indicates that axis movement in one axis has
+        stopped but continues in the other axis.
+        When multiple axis_stop events occur within the same
+        frame, this indicates that these axes stopped in the same instance.
+
+        A frame event is sent for every logical event group,
+        even if the group only contains a single pointer event.
+        Specifically, a client may get a sequence: motion, frame, button,
+        frame, axis, frame, axis_stop, frame.
+      </description>
+    </event>
+  </interface>
+</protocol>
