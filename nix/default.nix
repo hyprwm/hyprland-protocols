@@ -4,12 +4,13 @@
   meson,
   ninja,
   version,
+  self,
 }:
 stdenv.mkDerivation {
   pname = "hyprland-protocols";
   inherit version;
 
-  src = ../.;
+  src = self;
 
   nativeBuildInputs = [meson ninja];
 

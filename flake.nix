@@ -32,6 +32,7 @@
       hyprland-protocols = final: prev: {
         hyprland-protocols = final.callPackage ./nix/default.nix {
           version = version + "+date=" + (mkDate (self.lastModifiedDate or "19700101")) + "_" + (self.shortRev or "dirty");
+          inherit self;
         };
       };
     };
