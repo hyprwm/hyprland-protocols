@@ -17,6 +17,7 @@ Some of the protocols here also do not belong in w-p, as they are specific to Hy
 - `hyprland_surface` -> for setting hyprland specific wl_surface properties.
 - `hyprland_lock_notify` -> for notifying a client about the screen being locked and unlocked.
 - `hyprland_toplevel_mapping` -> for mapping toplevels to hyprland IDs.
+- `hyprland_input_capture` -> for EIS input capture.
 
 ## Building
 ```sh
