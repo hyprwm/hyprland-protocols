@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<protocol name="hyprland_input_capture_v1">
+  <copyright>
+    Copyright © 2025 Fl0w
+
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+
+    1. Redistributions of source code must retain the above copyright notice, this
+    list of conditions and the following disclaimer.
+
+    2. Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions and the following disclaimer in the documentation
+    and/or other materials provided with the distribution.
+
+    3. Neither the name of the copyright holder nor the names of its
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+    FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+    DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+    SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+    CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+    OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  </copyright>
+
+  <description summary="Bridge input capture to the compositor">
+	This protocol is a bridge of the XDG input capture to the compositor.
+  </description>
+
+  <interface name="hyprland_input_capture_manager_v1" version="1">
+    <description summary="manage input capture sessions">
+      This interface allows to create an input capture session.
+    </description>
+
+    <request name="create_session">
+      <description summary="create a input capture session">
+        Create a input capture session.
+      </description>
+
+      <arg name="session" type="new_id" interface="hyprland_input_capture_v1"/>
+      <arg name="handle" type="string"/>
+    </request>
+  </interface>
+
+ <interface name="hyprland_input_capture_v1" version="1">
+    <description summary="close reproduction of the xdg input capture portal">
+	  Interface that is used to create barrier, and trigger capture and release of the pointer.
+	  The inputs are sent through an EIS socket, when the cursor hit a barrier.
+	  Barriers can only be placed on screen edges and need to be a straight line that cover one corner to another.
+	</description>
+
+	<request name="clear_barriers">
+      <description summary="clear every barriers registered">
+		Remove every barriers from the session, new barriers need to be send before calling enable again.
+      </description>
+  	</request>
+
+	<request name="add_barrier">
+	  <description summary="add one barrier">
+	    Add one barrier to the current session, the barrier need to a line placed on the edge of the screen, and is a straight line from one corner to another.
+   	  </description>
+
+      <arg name="zone_set" type="uint" summary="The current zone_set" />
+      <arg name="id" type="uint" summary="The zone id" />
+      <arg name="x1" type="uint"/>
+      <arg name="y1" type="uint"/>
+      <arg name="x2" type="uint"/>
+      <arg name="y2" type="uint"/>
+	</request>
+
+	<request name="enable">
+	  <description summary="enable input capturing">
+	    Enable the input capturing to be triggered by the cursor crossing a barrier.
+	  </description>
+  	</request>
+
+	<request name="disable">
+	  <description summary="disable input capturing">
+	    Disable input capturing, the crossing of a barrier will not trigger anymore input capture.
+	  </description>
+  	</request>
+
+	<request name="release">
+	  <description summary="release input capturing">
+	    Release input capturing, the input are not intercepted anymore and barrier crossing will activate it again.
+		If x != -1 and y != -1 then the cursor is warped to the x and y coordinates.
+	  </description>
+
+      <arg name="activation_id" type="uint" summary="The activation id provided when activated is called" />
+      <arg name="x"
+        type="fixed"
+        summary="the x position of the cursor" />
+      <arg name="y" type="fixed"
+        summary="the y position of the cursor" />
+  	</request>
+
+	<event name="eis_fd">
+	  <description summary="eis file descriptor">
+		This event provide the file descriptor of an eis socket where inputs will be sent when input capturing is active
+	  </description>
+
+      <arg name="fd" type="fd" summary="eis socket file descriptor" />
+  	</event>
+
+    <event name="disabled">
+      <description summary="disable the session">
+		Called when the application will not receive captured input. The application can call enable to request future input capturing
+      </description>
+    </event>
+
+    <event name="activated">
+      <description summary="inputs has been captured">
+		Called when the application is about to receive inputs
+      </description>
+
+      <arg name="activation_id"
+        type="uint"
+        summary="Same number used in eis start_emulating to allow synchronisation" />
+      <arg name="x"
+        type="fixed"
+        summary="the x position of the cursor" />
+      <arg name="y" type="fixed"
+        summary="the y position of the cursor" />
+      <arg name="barrier_id"
+        type="uint"
+        summary="the is of the barrier that have been triggered" />
+    </event>
+
+    <event name="deactivated">
+	  <description summary="pointer motion">
+        Called when input capture is stopped, and inputs are no longer sent to the application
+	  </description>
+      <arg name="activation_id"
+        type="uint"
+        summary="same activation id of the latest activated event" />
+    </event>
+
+    <enum name="error">
+      <entry name="invalid_barrier_id" value="0"
+        summary="The barrier id already exist"/>
+      <entry name="invalid_barrier" value="1"
+        summary="The barrier coordinates are invalid"/>
+      <entry name="invalid_activation_id" value="2"
+        summary="The activation id provided is invalid"/>
+    </enum>
+ </interface>
+</protocol>
