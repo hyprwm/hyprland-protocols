@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   src = ../.;
 
-  nativeBuildInputs = [cmake];
+  nativeBuildInputs = [ cmake ];
 
   meta = {
     homepage = "https://github.com/hyprwm/hyprland-protocols";
