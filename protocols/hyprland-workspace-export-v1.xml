@@ -39,7 +39,7 @@
     xdg-desktop-portal-hyprland.
 
     WARNING:
-    (I asked claude to generate this file based on hyprland-toplevel-export-v1.xml, please tell me if you see any errors in this file"
+    (I asked Claude to generate this file based on hyprland-toplevel-export-v1.xml, please tell me if you see any errors in this file")
   </description>
 
   <interface name="hyprland_workspace_export_manager_v1" version="1">
@@ -61,10 +61,10 @@
       <arg name="frame"         type="new_id"
            interface="hyprland_workspace_export_frame_v1"
            summary="the new frame object"/>
-      <arg name="workspace_name" type="string"
-           summary="the name of the workspace to capture"/>
       <arg name="overlay_cursor" type="int"
            summary="whether to include the cursor in the frame"/>
+      <arg name="workspace_name" type="string"
+           summary="the name of the workspace to capture"/>
     </request>
 
     <request name="destroy" type="destructor">
