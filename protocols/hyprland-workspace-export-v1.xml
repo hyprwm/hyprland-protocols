@@ -37,9 +37,6 @@
 
     Primary use case is screensharing an entire workspace via
     xdg-desktop-portal-hyprland.
-
-    WARNING:
-    (I asked Claude to generate this file based on hyprland-toplevel-export-v1.xml, please tell me if you see any errors in this file")
   </description>
 
   <interface name="hyprland_workspace_export_manager_v1" version="1">
