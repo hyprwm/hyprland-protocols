@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<protocol name="hyprland_workspace_export_v1">
+
+  <copyright>
+    Copyright © 2026 thkinh
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+
+    1. Redistributions of source code must retain the above copyright notice, this
+       list of conditions and the following disclaimer.
+
+    2. Redistributions in binary form must reproduce the above copyright notice,
+       this list of conditions and the following disclaimer in the documentation
+       and/or other materials provided with the distribution.
+
+    3. Neither the name of the copyright holder nor the names of its
+       contributors may be used to endorse or promote products derived from
+       this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+    FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+    DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+    SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+    CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+    OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  </copyright>
+
+  <description summary="workspace screen capture protocol">
+    This protocol allows clients to capture frames of a whole Hyprland
+    workspaces, as opposed to individual toplevels.
+
+    Primary use case is screensharing an entire workspace via
+    xdg-desktop-portal-hyprland.
+  </description>
+
+  <interface name="hyprland_workspace_export_manager_v1" version="1">
+
+    <description summary="manager for capturing workspace frames">
+      An object for capturing workspace frames. The client binds to this
+      global and uses it to create frame objects per workspace.
+    </description>
+
+    <!-- Client requests a frame of a specific workspace by name/id -->
+    <request name="capture_workspace">
+      <description summary="capture a workspace frame">
+        Create a frame object for the given workspace. The workspace is
+        identified by its name (e.g. "1", "2", "special:magic").
+
+        The compositor will begin preparing the frame and send buffer
+        events on the returned frame object.
+      </description>
+      <arg name="frame"         type="new_id"
+           interface="hyprland_workspace_export_frame_v1"
+           summary="the new frame object"/>
+      <arg name="overlay_cursor" type="int"
+           summary="whether to include the cursor in the frame"/>
+      <arg name="workspace_name" type="string"
+           summary="the name of the workspace to capture"/>
+    </request>
+
+    <request name="destroy" type="destructor">
+      <description summary="destroy the manager">
+        Destroys the manager. In-flight frame objects are unaffected.
+      </description>
+    </request>
+
+    <enum name="error">
+      <entry name="invalid_workspace" value="0"
+        summary="the workspace does not exist"/>
+    </enum>
+
+  </interface>
+
+  <!-- ② The frame object — mirrors toplevel_export_frame closely -->
+  <interface name="hyprland_workspace_export_frame_v1" version="1">
+
+    <description summary="a frame of a workspace ready for copy">
+      Represents a single captured frame of a workspace.
+
+      The lifecycle mirrors hyprland_toplevel_export_frame_v1:
+        1. compositor sends buffer / linux_dmabuf events
+        2. compositor sends buffer_done
+        3. client creates a wl_buffer and sends copy request
+        4. compositor sends damage + flags + ready  (success)
+             OR failed                              (failure)
+        5. client destroys the frame
+    </description>
+
+    <!-- Same buffer events as toplevel export -->
+    <event name="buffer">
+      <description summary="wl_shm buffer info"/>
+      <arg name="format" type="uint" enum="wl_shm.format"
+           summary="buffer format"/>
+      <arg name="width"  type="uint" summary="buffer width"/>
+      <arg name="height" type="uint" summary="buffer height"/>
+      <arg name="stride" type="uint" summary="buffer stride"/>
+    </event>
+
+    <event name="linux_dmabuf">
+      <description summary="linux-dmabuf buffer info"/>
+      <arg name="format" type="uint" summary="fourcc pixel format"/>
+      <arg name="width"  type="uint" summary="buffer width"/>
+      <arg name="height" type="uint" summary="buffer height"/>
+    </event>
+
+    <event name="buffer_done">
+      <description summary="all buffer types reported">
+        Sent once all buffer events have been sent. The client should
+        now create a buffer and send the copy request.
+      </description>
+    </event>
+
+    <!-- Client requests the actual copy -->
+    <request name="copy">
+      <description summary="copy the workspace frame">
+        Copy the workspace frame into the supplied buffer. The buffer
+        must match the dimensions and format from the buffer events.
+
+        On success: compositor sends damage (if applicable), flags, ready.
+        On failure: compositor sends failed.
+      </description>
+      <arg name="buffer"        type="object" interface="wl_buffer"/>
+      <arg name="ignore_damage" type="int"
+           summary="if non-zero, copy even if nothing changed"/>
+    </request>
+
+    <!-- Compositor reports what changed -->
+    <event name="damage">
+      <description summary="damaged region since last copy"/>
+      <arg name="x"      type="uint" summary="x coordinate"/>
+      <arg name="y"      type="uint" summary="y coordinate"/>
+      <arg name="width"  type="uint" summary="damaged width"/>
+      <arg name="height" type="uint" summary="damaged height"/>
+    </event>
+
+    <enum name="flags" bitfield="true">
+      <entry name="y_invert" value="1" summary="contents are y-inverted"/>
+    </enum>
+
+    <event name="flags">
+      <description summary="frame flags">
+        Sent once before the ready event.
+      </description>
+      <arg name="flags" type="uint" enum="flags" summary="frame flags"/>
+    </event>
+
+    <event name="ready">
+      <description summary="frame is ready for reading">
+        The frame has been copied successfully. Timestamp follows the
+        same tv_sec_hi/tv_sec_lo/tv_nsec convention as toplevel export.
+      </description>
+      <arg name="tv_sec_hi" type="uint" summary="high 32 bits of seconds"/>
+      <arg name="tv_sec_lo" type="uint" summary="low 32 bits of seconds"/>
+      <arg name="tv_nsec"   type="uint" summary="nanoseconds"/>
+    </event>
+
+    <event name="failed">
+      <description summary="frame capture failed">
+        The capture failed. The client should destroy this object.
+      </description>
+    </event>
+
+    <enum name="error">
+      <entry name="already_used"   value="0"
+        summary="copy was already called on this frame"/>
+      <entry name="invalid_buffer" value="1"
+        summary="buffer dimensions or format do not match"/>
+    </enum>
+
+    <request name="destroy" type="destructor">
+      <description summary="destroy the frame object">
+        Can be sent at any time, including before ready or failed.
+      </description>
+    </request>
+
+  </interface>
+
+</protocol>
