@@ -35,7 +35,7 @@
 	This protocol is a bridge of the XDG input capture to the compositor.
   </description>
 
-  <interface name="hyprland_input_capture_manager_v1" version="1">
+  <interface name="hyprland_input_capture_manager_v1" version="2">
     <description summary="manage input capture sessions">
       This interface allows to create an input capture session.
     </description>
@@ -50,7 +50,7 @@
     </request>
   </interface>
 
- <interface name="hyprland_input_capture_v1" version="1">
+ <interface name="hyprland_input_capture_v1" version="2">
     <description summary="close reproduction of the xdg input capture portal">
 	  Interface that is used to create barrier, and trigger capture and release of the pointer.
 	  The inputs are sent through an EIS socket, when the cursor hit a barrier.
@@ -142,6 +142,16 @@
         type="uint"
         summary="same activation id of the latest activated event" />
     </event>
+
+	<request name="destroy" type="destructor" since="2">
+	  <description summary="destroy the session">
+	    Destroy the input capture session.
+
+	    Any barriers registered by this session are removed, input capturing is
+	    stopped, and the eis socket associated with this session is closed by the
+	    compositor. The client must not use the object after this request.
+	  </description>
+	</request>
 
     <enum name="error">
       <entry name="invalid_barrier_id" value="0"
