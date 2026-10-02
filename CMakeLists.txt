@@ -19,7 +19,8 @@ set(PROTOCOL_FILES
     protocols/hyprland-surface-v1.xml
     protocols/hyprland-lock-notify-v1.xml
     protocols/hyprland-toplevel-mapping-v1.xml
-    protocols/hyprland-input-capture-v1.xml)
+    protocols/hyprland-input-capture-v1.xml
+    protocols/hyprland-workspace-image-capture-source-v1.xml)
 
 foreach(PROTOCOL_FILE ${PROTOCOL_FILES})
   get_filename_component(PROTOCOL_DIR ${PROTOCOL_FILE} DIRECTORY)

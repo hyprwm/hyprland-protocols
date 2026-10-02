@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<protocol name="hyprland_workspace_image_capture_source_v1">
+  <copyright>
+    Copyright © 2026 Vaxry
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+
+    1. Redistributions of source code must retain the above copyright notice, this
+       list of conditions and the following disclaimer.
+
+    2. Redistributions in binary form must reproduce the above copyright notice,
+       this list of conditions and the following disclaimer in the documentation
+       and/or other materials provided with the distribution.
+
+    3. Neither the name of the copyright holder nor the names of its
+       contributors may be used to endorse or promote products derived from
+       this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+    FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+    DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+    SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+    CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+    OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  </copyright>
+
+  <description summary="image capture sources for workspaces">
+      This protocol is a Hyprland extension for capturing workspace contents.
+  </description>
+
+  <interface name="hyprland_workspace_image_capture_source_manager_v1" version="1">
+    <description summary="image capture source manager for workspaces">
+        This manager can create ICC capture sources from ext-workspace handles.
+    </description>
+
+    <enum name="capture_mode">
+      <description summary="content included in the source image">
+          This enum describes the allowed capture modes.
+      </description>
+
+      <entry name="windows_only" value="0">
+        <description summary="workspace windows only">
+          Include only the selected workspace's windows and their associated
+          surfaces and decorations. The background will be transparent.
+        </description>
+      </entry>
+
+      <entry name="everything" value="1">
+        <description summary="workspace windows and output-global desktop elements">
+          Include the selected workspace's windows together with wallpaper,
+          panels, pinned windows, and other output-global surfaces, including
+          layer-shell surfaces, associated with its output.
+        </description>
+      </entry>
+    </enum>
+
+    <enum name="error">
+      <entry name="invalid_mode" value="0" summary="unknown capture mode"/>
+    </enum>
+
+    <request name="create_source">
+      <description summary="create an image capture source for a workspace">
+        Create an ICC capture source from a given workspace handle.
+
+        This source does not own the workspace handle. If the workspace is
+        removed, further attempts to share this source's contents will produce
+        a transparent, empty image.
+      </description>
+      <arg name="source" type="new_id" interface="ext_image_capture_source_v1"
+        summary="new workspace image capture source"/>
+      <arg name="workspace" type="object" interface="ext_workspace_handle_v1"
+        summary="workspace to capture"/>
+      <arg name="mode" type="uint" enum="capture_mode"
+        summary="content to include in the source image"/>
+    </request>
+
+    <request name="destroy" type="destructor">
+      <description summary="destroy the manager">
+        Destroy this manager. Sources and capture sessions created through
+        this manager remain valid after its destruction.
+      </description>
+    </request>
+  </interface>
+</protocol>
