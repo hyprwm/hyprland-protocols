@@ -68,9 +68,9 @@
       <description summary="create an image capture source for a workspace">
         Create an ICC capture source from a given workspace handle.
 
-        This source does not own the workspace handle. If the workspace is
-        removed, further attempts to share this source's contents will produce
-        a transparent, empty image.
+        Depending on compositor policy, the workspace may be removed while this
+        source exists. If the workspace is removed, further attempts to share
+        this source's contents will produce a transparent, empty image.
       </description>
       <arg name="source" type="new_id" interface="ext_image_capture_source_v1"
         summary="new workspace image capture source"/>
